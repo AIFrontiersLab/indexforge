@@ -1,0 +1,22 @@
+flowchart LR
+  b1["Gateway Controller"]
+  b2["Reranker Engine"]
+  b3["Fallback Handler"]
+  b4["Metrics Collector"]
+  b1 -->|Forward payload to Reranker Engine| b2
+  b2 -->|Return reordered list| b1
+  b1 -->|On failure, trigger Fallback Handler| b3
+  b1 -->|Log metrics| b4
+
+flowchart TB
+  subgraph happy [Happy path]
+    h_b1["Gateway Controller"]
+    h_b2["Reranker Engine"]
+    h_b3["Fallback Handler"]
+    h_b4["Metrics Collector"]
+    h_b1 --> h_b2
+    h_b2 --> h_b3
+    h_b3 --> h_b4
+  end
+  fail["Failure / abstain"]
+  h_b4 -.-> fail

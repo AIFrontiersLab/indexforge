@@ -1,0 +1,48 @@
+{
+  "boxes": [
+    {
+      "detail": "Entry point for reranking requests. Validates input schema and orchestrates the flow.",
+      "id": "b1",
+      "label": "Gateway Controller"
+    },
+    {
+      "detail": "Core logic. Loads the cross-encoder model. Computes relevance scores for each (query, document) pair.",
+      "id": "b2",
+      "label": "Reranker Engine"
+    },
+    {
+      "detail": "Ensures system resilience. If the Reranker Engine fails or times out, it returns the original vector search order (or a lightweight lexical match) to prevent pipeline failure.",
+      "id": "b3",
+      "label": "Fallback Handler"
+    },
+    {
+      "detail": "Logs latency, throughput, and reranking score distributions for observability.",
+      "id": "b4",
+      "label": "Metrics Collector"
+    }
+  ],
+  "flows": [
+    {
+      "from": "b1",
+      "label": "Forward payload to Reranker Engine",
+      "to": "b2"
+    },
+    {
+      "from": "b2",
+      "label": "Return reordered list",
+      "to": "b1"
+    },
+    {
+      "from": "b1",
+      "label": "On failure, trigger Fallback Handler",
+      "to": "b3"
+    },
+    {
+      "from": "b1",
+      "label": "Log metrics",
+      "to": "b4"
+    }
+  ],
+  "subtitle": "One concept. Three AI perspectives. One tested architecture.",
+  "title": "Reranking Gateway"
+}

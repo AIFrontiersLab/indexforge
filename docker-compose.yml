@@ -1,0 +1,9 @@
+services:
+  reranking-gateway:
+    build: .
+    ports: ["8080:8080"]
+    environment:
+      RERANKING_GATEWAY_CONFIG: /app/config/development.toml
+      RERANKING_GATEWAY_HTTP__HOST: 0.0.0.0
+    volumes:
+      - ./var:/app/var
